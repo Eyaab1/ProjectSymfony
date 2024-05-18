@@ -40,7 +40,7 @@ class EtudiantController extends AbstractController
     $etudiant->setEmail($data['email']);
     $etudiant->setNumtel($data['numtel']);
     $etudiant->setType('etudiant');
-    $etudiant->setPassword($passwordHasher->hashPassword($etudiant, $data['password']));
+    $etudiant->setPassword($data['password']);
     $etudiant->setRoles(['ROLE_USER']);
     $etudiant->setSpecialite($data['specialite']);
 

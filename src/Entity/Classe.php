@@ -7,6 +7,7 @@ use App\Repository\ClasseRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+
 #[ORM\Entity(repositoryClass: ClasseRepository::class)]
 #[ApiResource()]
 class Classe
@@ -19,10 +20,11 @@ class Classe
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
-    #[ORM\OneToMany(targetEntity: Etudiant::class, mappedBy: 'idClasse')]
+    #[ORM\OneToMany(targetEntity: Etudiant::class, mappedBy: "classe")]
     private Collection $etudiants;
 
-    #[ORM\ManyToMany(targetEntity: Enseignant::class, mappedBy: 'idClasses')]
+    #[ORM\ManyToMany(targetEntity: Enseignant::class, inversedBy: "classes")]
+    #[ORM\JoinTable(name: "enseignant_classe")]
     private Collection $enseignants;
 
     public function __construct()
@@ -36,17 +38,14 @@ class Classe
         return $this->id;
     }
 
-    
-
     public function getNom(): ?string
     {
         return $this->nom;
     }
 
-    public function setNom(string $nom): static
+    public function setNom(string $nom): self
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -58,25 +57,22 @@ class Classe
         return $this->etudiants;
     }
 
-    public function addEtudiant(Etudiant $etudiant): static
+    public function addEtudiant(Etudiant $etudiant): self
     {
         if (!$this->etudiants->contains($etudiant)) {
             $this->etudiants->add($etudiant);
-            $etudiant->setIdClasse($this);
+            $etudiant->setClasse($this);
         }
-
         return $this;
     }
 
-    public function removeEtudiant(Etudiant $etudiant): static
+    public function removeEtudiant(Etudiant $etudiant): self
     {
         if ($this->etudiants->removeElement($etudiant)) {
-            // set the owning side to null (unless already changed)
-            if ($etudiant->getIdClasse() === $this) {
-                $etudiant->setIdClasse(null);
+            if ($etudiant->getClasse() === $this) {
+                $etudiant->setClasse(null);
             }
         }
-
         return $this;
     }
 
@@ -88,22 +84,24 @@ class Classe
         return $this->enseignants;
     }
 
-    public function addEnseignant(Enseignant $enseignant): static
+    public function addEnseignant(Enseignant $enseignant): self
     {
         if (!$this->enseignants->contains($enseignant)) {
             $this->enseignants->add($enseignant);
-            $enseignant->addIdClass($this);
+            $enseignant->addClasse($this);
         }
-
         return $this;
     }
 
-    public function removeEnseignant(Enseignant $enseignant): static
+    public function removeEnseignant(Enseignant $enseignant): self
     {
         if ($this->enseignants->removeElement($enseignant)) {
-            $enseignant->removeIdClass($this);
+            $enseignant->removeClasse($this);
         }
-
         return $this;
+    }
+    public function __toString()
+    {
+        return $this->getNom();
     }
 }

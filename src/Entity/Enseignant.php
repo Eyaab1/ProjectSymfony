@@ -10,12 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EnseignantRepository::class)]
 #[ApiResource()]
-
-
 class Enseignant extends User
 {
-    
-    
     #[ORM\Column(length: 255)]
     private ?string $codeENS = null;
 
@@ -25,17 +21,14 @@ class Enseignant extends User
     #[ORM\Column(length: 255)]
     private ?string $matiere = null;
 
-     /**
-     * @ORM\ManyToMany(targetEntity=Classe::class, mappedBy="enseignants")
-     */
+    #[ORM\ManyToMany(targetEntity: Classe::class, mappedBy: "enseignants")]
     private Collection $classes;
 
     public function __construct()
     {
         $this->classes = new ArrayCollection();
+        $this->setType('enseignant');
     }
-
-    
 
     public function getCodeENS(): ?string
     {
@@ -45,7 +38,6 @@ class Enseignant extends User
     public function setCodeENS(string $codeENS): self
     {
         $this->codeENS = $codeENS;
-
         return $this;
     }
 
@@ -57,7 +49,6 @@ class Enseignant extends User
     public function setNbAnneeExp(int $nbAnneeExp): self
     {
         $this->nbAnneeExp = $nbAnneeExp;
-
         return $this;
     }
 
@@ -69,30 +60,29 @@ class Enseignant extends User
     public function setMatiere(string $matiere): self
     {
         $this->matiere = $matiere;
-
         return $this;
     }
 
     /**
-     * @return Collection<int, Classe>
+     * @return Collection|Classe[]
      */
-    public function getIdClasses(): Collection
+    public function getClasses(): Collection
     {
         return $this->classes;
     }
 
-    public function addIdClass(Classe $idClass): self
+    public function addClasse(Classe $classe): self
     {
-        if (!$this->classes->contains($idClass)) {
-            $this->classes->add($idClass);
+        if (!$this->classes->contains($classe)) {
+            $this->classes[] = $classe;
         }
 
         return $this;
     }
 
-    public function removeIdClass(Classe $idClass): self
+    public function removeClasse(Classe $classe): self
     {
-        $this->classes->removeElement($idClass);
+        $this->classes->removeElement($classe);
 
         return $this;
     }

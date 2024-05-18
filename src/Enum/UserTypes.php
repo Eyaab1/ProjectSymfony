@@ -6,7 +6,7 @@ enum UserTypes: string
 {
     case ETUDIANT = 'etudiant';
     case ENSEIGNANT = 'enseignant';
-    case ADMIN = 'admin';
+    case ADMIN = 'administrateur';
 
     
 }

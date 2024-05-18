@@ -39,7 +39,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $numtel = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\Choice(choices: [UserTypes::ETUDIANT, UserTypes::ENSEIGNANT, UserTypes::ADMIN], message: 'Choose a valid type.')]
+    #[Assert\Choice(choices: ['administrateur','etudiant','enseignant'], message: 'Choose a valid type.')]
     private ?string $type = null;
 
     #[ORM\Column(type: 'string', length: 255)]

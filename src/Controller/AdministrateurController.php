@@ -45,8 +45,8 @@ class AdministrateurController extends AbstractController
             $user->setPrenom($data['prenom']);
             $user->setEmail($data['email']);
             $user->setNumtel($data['numtel']);
-            $user->setPassword($passwordHasher->hashPassword($user, $data['password']));
-            $user->setType($data['type']);
+            $user->setPassword($data['password']);
+            $user->setType('administrateur');
             $user->setRoles(['ROLE_ADMIN']);
             $user->setRole($data['role']);
 

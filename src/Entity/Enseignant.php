@@ -28,7 +28,7 @@ class Enseignant extends User
      /**
      * @ORM\ManyToMany(targetEntity=Classe::class, mappedBy="enseignants")
      */
-    private $classes;
+    private Collection $classes;
 
     public function __construct()
     {

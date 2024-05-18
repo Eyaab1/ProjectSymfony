@@ -202,3 +202,7 @@ app_file_delete:
     path: /file/{id}
     controller: 'App\Controller\FileController::delete'
     methods: ['DELETE']
+app_user_get_by_email:
+    path: /user/email/{email}
+    controller: 'App\Controller\UserController::getUserByEmail'
+    methods: [GET]

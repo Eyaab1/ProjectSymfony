@@ -29,6 +29,10 @@ class Enseignant extends User
         $this->classes = new ArrayCollection();
         $this->setType('enseignant');
     }
+    public function __toString()
+    {
+        return $this->getNom(); // or any other string representation you need
+    }
 
     public function getCodeENS(): ?string
     {

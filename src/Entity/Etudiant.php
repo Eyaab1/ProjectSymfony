@@ -24,7 +24,10 @@ class Etudiant extends User
         parent::__construct();
         $this->setType('etudiant');
     }
-
+    public function __toString()
+    {
+        return $this->getNom(); 
+    }
     public function getSpecialite(): ?string
     {
         return $this->specialite;

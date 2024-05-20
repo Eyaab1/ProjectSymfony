@@ -89,22 +89,49 @@ class PostController extends AbstractController
 
 
 #[Route('/new', name: 'app_post_new', methods: ['POST'])]
-    public function new(Request $request,UserRepository $userRepository): JsonResponse
+public function new(Request $request, UserRepository $userRepository): JsonResponse
     {
         try {
-            $data = json_decode($request->getContent(), true);
             $post = new Post();
-            $post->setContenu($data['contenu']);
+            $post->setContenu($request->get('contenu'));
             $post->setPublished(new \DateTime());
-            $post->setEstPublie($data['estPublie']);
-            $user = $userRepository->find($data['user']);
+            $post->setEstPublie($request->get('estPublie'));
 
+            $user = $userRepository->find($request->get('user'));
+            if (!$user) {
+                throw new \Exception('User not found');
+            }
             $post->setUser($user);
+            $post->setFile($request->get('file'));
+            // $uploadedFiles = $request->files->get('files');
+            // if ($uploadedFiles) {
+            //     foreach ($uploadedFiles as $uploadedFile) {
+            //         if ($uploadedFile instanceof UploadedFile) {
+            //             $file = new File();
+            //             $fileName = md5(uniqid()) . '.' . $uploadedFile->guessExtension();
+
+            //             // Save to Symfony directory
+            //             $symfonyUploadsDir = $this->getParameter('symfony_uploads_directory');
+            //             $uploadedFile->move($symfonyUploadsDir, $fileName);
+
+            //             // Copy to Angular directory
+            //             $angularAssetsDir = $this->getParameter('angular_assets_directory');
+            //             copy($symfonyUploadsDir . '/' . $fileName, $angularAssetsDir . '/' . $fileName);
+
+            //             $file->setFileName($fileName);
+            //             $post->addFile($file);
+            //             $this->entityManager->persist($file);
+            //         }
+            //     }
+            // }
+
+
             $this->entityManager->persist($post);
             $this->entityManager->flush();
-            return $this->json(['status' => 'Post created'], Response::HTTP_CREATED);
+
+            return new JsonResponse(['status' => 'Post created'], Response::HTTP_CREATED);
         } catch (\Exception $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

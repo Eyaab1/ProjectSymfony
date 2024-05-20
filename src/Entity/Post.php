@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use phpDocumentor\Reflection\Types\Boolean;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[ApiResource()]
@@ -31,8 +32,13 @@ class Post
     #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'post', orphanRemoval: true)] // Corrected mappedBy attribute
     private Collection $likes;
 
+    
     #[ORM\OneToMany(targetEntity: File::class, mappedBy: 'post')]
+    
     private Collection $files;
+
+    #[ORM\Column(length: 255)]
+    private ?string $file = null;
 
     #[ORM\Column]
     private ?bool $estPublie = null;
@@ -57,6 +63,18 @@ class Post
     public function getContenu(): ?string
     {
         return $this->contenu;
+    }
+
+    public function setFile(string $file): self
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    public function getFile(): ?string
+    {
+        return $this->file;
     }
 
     public function setContenu(string $contenu): self

@@ -107,10 +107,11 @@ class UserController extends AbstractController
         }
     }
 
-    #[Route('/email/{email}', name: 'app_user_get_by_email', methods: ['GET'])]
-    public function getUserByEmail($email, UserRepository $userRepository, SerializerInterface $serializer): Response
+    #[Route('/email', name: 'app_user_get_by_email', methods: ['GET'])]
+    public function getUserByEmail(Request $request, UserRepository $userRepository, SerializerInterface $serializer): Response
     {
         try {
+            $email = $request->query->get('email');
             $user = $userRepository->findOneBy(['email' => $email]);
             if ($user === null) {
                 return new JsonResponse(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
@@ -121,4 +122,5 @@ class UserController extends AbstractController
             return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
 }

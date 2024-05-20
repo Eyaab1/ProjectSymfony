@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Entity;
-
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\EnseignantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,7 +20,7 @@ class Enseignant extends User
     private ?string $matiere = null;
 
     #[ORM\ManyToMany(targetEntity: Classe::class, mappedBy: "enseignants")]
-    private Collection $classes;
+    private  $classes;
 
     public function __construct()
     {
@@ -31,7 +29,7 @@ class Enseignant extends User
     }
     public function __toString()
     {
-        return $this->getNom(); // or any other string representation you need
+        return $this->getNom(); 
     }
 
     public function getCodeENS(): ?string
